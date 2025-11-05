@@ -1,4 +1,9 @@
 
+<?php 
+    // require __DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR . "functions.php";
+    $formats = formats_all();
+?>
+
 <!-- NOTE: ENSURE FORM METHOD IS SET TO POST AND THAT ALL FIELDS HAVE NAMES -->
 
 <form method="POST">
@@ -15,11 +20,9 @@
 
     <select name="format_id" class="form-select" required>
         <option value="" default> Select a Format </option>
-        <option value="1">CD</option>
-        <option value="2">8 Track</option>
-        <option value="3">mp4</option>
-        <option value="4">45</option>
-        <option value="5">72</option>
+        <?php foreach ($formats as $f): ?>
+            <option value="<?= (int)$f['id'] ?>"><?= htmlspecialchars($f['name']) ?></option>
+        <?php endforeach; ?>
     </select>
 
     <br>
