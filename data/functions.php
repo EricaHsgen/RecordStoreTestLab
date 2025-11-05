@@ -23,12 +23,12 @@
         return $stmt -> fetchAll();
     }
 
-    function record_insert(){
+    function record_insert($title, $artist, $price, $format_id){
         // TEMPORARY VALUES
-        $title = "To Kill a Living Book";
-        $artist = "Mili";
-        $price = 15.00;
-        $format_id = 1; 
+        // $title = "To Kill a Living Book";
+        // $artist = "Mili";
+        // $price = 15.00;
+        // $format_id = 1; 
 
         $pdo = get_pdo();
 
@@ -42,6 +42,6 @@
         ':price'    => $price,
         ':format_id' => $format_id
         ]);
-        echo("Insert success: true, rows: 1");
+        // echo("Insert success: true, rows: 1");
     }
 ?>

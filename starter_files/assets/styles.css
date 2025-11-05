@@ -1,0 +1,29 @@
+body{
+    margin: auto;
+    text-align: center;
+    background-color: rgb(199, 181, 199);
+}
+
+th{
+    text-align: left;
+}
+
+table{
+    margin: auto;
+}
+
+td{
+    border: 2px solid black;
+    background-color: white;
+}
+
+nav{
+    width: 75%;
+    margin: auto;
+    text-align: left;
+}
+
+form{
+    width: 75%;
+    margin: auto;
+}
