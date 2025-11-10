@@ -17,7 +17,7 @@
         $pdo = get_pdo();
 
         $stmt = $pdo -> prepare("
-            SELECT title, artist, price, name FROM records JOIN formats ON formats.id = records.format_id; 
+            SELECT records.id as record_id, title, artist, price, name FROM records JOIN formats ON formats.id = records.format_id; 
         ");
         $stmt -> execute();
         return $stmt -> fetchAll();
@@ -43,5 +43,48 @@
         ':format_id' => $format_id
         ]);
         // echo("Insert success: true, rows: 1");
+    }
+
+    function record_get(int $id): ?array{
+        $pdo = get_pdo();
+        $stmt = $pdo -> prepare("
+            SELECT records.id, title, artist, price, name, formats.id FROM records 
+            JOIN formats ON formats.id = records.format_id
+            WHERE records.id = :id
+            LIMIT 1 
+        ");
+        $stmt -> execute([':id' => $id]);
+        $row = $stmt -> fetch(PDO::FETCH_ASSOC);
+        return $row ?: null;
+    }
+
+    function record_update(int $id, string $title, string $artist, float $price, int $format_id): int{
+        $pdo = get_pdo();
+        $stmt = $pdo -> prepare("
+            UPDATE records
+                SET title = :title,
+                    artist = :artist,
+                    price = :price,
+                    format_id = :format_id
+                WHERE id = :id
+        ");
+        $stmt -> execute([
+            ':title' => $title,
+            ':artist' => $artist,
+            ':price' => $price,
+            ':format_id' => $format_id,
+            ':id' => $id
+        ]);
+        return $stmt -> rowCount();
+    }
+
+    function record_delete(int $id): int{
+        $pdo = get_pdo();
+
+        $stmt = $pdo -> prepare("
+            DELETE FROM records WHERE id = :id
+        ");
+        $stmt -> execute([":id" => $id]);
+        return $stmt -> rowCount();
     }
 ?>
