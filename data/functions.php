@@ -87,4 +87,65 @@
         $stmt -> execute([":id" => $id]);
         return $stmt -> rowCount();
     }
+
+    function user_create(string $username, string $full_name, string $hash): void{
+        $pdo = get_pdo();
+        
+        $stmt = $pdo -> prepare("
+            INSERT INTO users (username, full_name, password_hash)
+            VALUES (:u, :f, :p)
+        ");
+        $stmt -> execute([
+            ':u' => $username,
+            ':f' => $full_name,
+            ':p' => $hash
+        ]);
+    }
+
+    function user_find_by_username(string $username): ?array {
+        $pdo = get_pdo();
+
+        $stmt = $pdo -> prepare("
+            SELECT * FROM users WHERE username = :u
+        ");
+        $stmt -> execute([':u' => $username]);
+
+        $row = $stmt -> fetch(PDO::FETCH_ASSOC);
+        return $row ?: null;
+    }
+
+    function records_by_ids(array $ids): array {
+        if(empty($ids)) return [];
+
+        $pdo = get_pdo();
+        // creating a string from an array (implode()) using array_fill with a comma as the separator.
+        // array_fill creates an array using a starting index of 0 with the length of the length of $ids
+        $ph = implode(',', array_fill(0, count($ids), '?'));
+        // what does ph stand for in this case?
+
+        $stmt = $pdo -> prepare("
+            SELECT r.id, r.title, r.artist, r.price, f.name
+            FROM records r
+            JOIN formats f ON r.format_id = f.id
+            WHERE r.id IN ($ph) 
+        "); 
+        // ↑ is it okay to use variables directly in this case if it's not data being put in a database?
+        // since $ph is just being used as criteria to search by?
+
+        $stmt -> execute($ids);
+        return $stmt -> fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    function purchase_create(int $user_id, int $record_id){
+        $pdo = get_pdo();
+
+        $stmt = $pdo -> prepare("
+            INSERT INTO purchases (user_id, record_id, purchase_date)
+            VALUES(:u, :r, NOW())
+        ");
+        $stmt -> execute([
+            ':u' => $user_id,
+            ':r' => $record_id
+        ]);
+    }
 ?>

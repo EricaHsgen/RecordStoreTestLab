@@ -24,7 +24,7 @@
                 <td class ="text-end">$<?= number_format((float)esc_html($r['price']), 2) ?></td>
                 <td><?= esc_html($r['name']) ?></td>
                 <!-- create update and delete buttons per row -->
-                 <td>
+                 <!-- <td>
                     <form method="post" class="d-inline">
                         <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
                         <input type="hidden" name="action" value="edit">
@@ -35,7 +35,20 @@
                         <input type="hidden" name="action" value="delete">
                         <button class="btn btn-sm btn-outline-danger">Delete</button>
                     </form>
-                 </td>
+                 </td> -->
+                 <td>
+                    <form method="post" class="d-inline">
+                        <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                        <input type="hidden" name="action" value="add_to_cart">
+                        <button class="btn btn-sm btn-outline-success">Add to Cart</button>
+                    </form>
+
+                    <form method="post" class="d-inline" onsubmit="return confirm('Delete this record?');">
+                        <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                        <input type="hidden" name="action" value="delete">
+                        <button class="btn btn-sm btn-outline-danger">Delete</button>
+                    </form>
+                </td>
             </tr>
         <?php endforeach; ?>
     </tbody>
